@@ -1,0 +1,86 @@
+nodes:
+  - address: 172.17.36.243
+    user: docker
+    role:
+      - worker
+    hostname_override: node01
+
+  - address: 172.17.36.198
+    user: docker
+    role:
+      - worker
+    hostname_override: node02
+
+  - address: 172.17.36.229
+    user: docker
+    role:
+      - worker
+    hostname_override: node03
+
+  - address: 172.17.36.232
+    user: docker
+    role:
+      - etcd
+      - controlplane
+    hostname_override: master01
+
+  - address: 172.17.36.220
+    user: docker
+    role:
+      - etcd
+      - controlplane
+    hostname_override: master02
+
+  - address: 172.17.36.225
+    user: docker
+    role:
+      - etcd
+      - controlplane
+    hostname_override: master03
+
+  - address: 172.17.36.224
+    user: docker
+    role:
+      - worker
+    hostname_override: node4
+
+  - address: 172.17.36.200
+    user: docker
+    role:
+      - worker
+    hostname_override: node5
+
+  - address: 172.17.36.108
+    user: docker
+    role:
+      - worker
+    hostname_override: node6
+
+  - address: 172.17.36.210
+    user: docker
+    role:
+      - worker
+    hostname_override: node7
+
+  - address: 172.17.36.237
+    user: docker
+    role:
+      - worker
+    hostname_override: node8
+
+#    - address: 172.17.36.209
+#      user: docker
+#      role:
+#        - worker
+#      hostname_override: node9
+
+services:
+  kubelet:
+    extra_args:
+      # 节点资源预留
+      enforce-node-allocatable: 'pods'
+      system-reserved: 'cpu=0.25,memory=200Mi'
+      kube-reserved: 'cpu=0.25,memory=1500Mi'
+
+network:
+  plugin: flannel
