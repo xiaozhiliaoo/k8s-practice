@@ -67,6 +67,13 @@ kubectl -n rd4 exec -it exchange-app-api-d8bf47766-krmmk  /bin/bash
 # 日志目录
 # /data/logs/app/exchange-app-api
 
+# 查看日志
+kubectl -n rd4 exec -it `kubectl get pods -n rd4 | grep 'exchange-web-api' | awk '{print $1}' | awk 'NR==1'` /bin/bash
+# shell:kubectl -n $1 exec -it `kubectl get pods -n $1 | grep $2 | awk '{print $1}' | awk 'NR==1'` /bin/bash
+
+kubectl get pods -n saas-new-taobao | grep operate-web | awk '{print $1}' | awk 'NR==1'
+
+
 # context
 kubectl config view
 
@@ -123,3 +130,31 @@ journalctl -u kubelet
 # kube-controller-manager日志
 
 # kube-scheduler日志
+
+
+# 所有资源在ns下的 查看资源列表
+kubectl api-resources --namespaced=true
+# 不在namespace下的资源
+kubectl api-resources --namespaced=false
+
+
+kubectl api-versions
+
+# 对象字段描述
+kubectl explain pod
+kubectl explain pod.spec
+
+# 列出API所有字段
+kubectl explain svc --recursive
+
+# 查看某个字段含义
+kubectl explain svc.spec.ports
+
+# 字段选择器
+kubectl get pods --field-selector status.phase=Running
+kubectl explain pod.status.phase
+kubectl get services  --all-namespaces --field-selector metadata.namespace!=default
+kubectl get pods --field-selector=status.phase!=Running,spec.restartPolicy=Always
+kubectl get pods --field-selector=status.phase==Running,spec.restartPolicy=Always -n rd4
+kubectl get statefulsets,services --all-namespaces --field-selector metadata.namespace!=default
+kubectl get statefulsets --all-namespaces --field-selector metadata.namespace=rd4
