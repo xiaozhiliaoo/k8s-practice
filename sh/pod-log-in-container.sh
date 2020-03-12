@@ -10,7 +10,7 @@ usage(){
 }
 
 if [ "$1" != "" ] && [ "$2" != "" ] ; then
-    kubectl logs -n $1  `kubectl get pods -n $1 | grep $2 | awk '{print $1}' | awk 'NR==1'`
+    kubectl -n $1 exec -it `kubectl get pods -n $1 | grep $2 | awk '{print $1}' | awk 'NR==1'` /bin/bash
 else
     usage
 fi

@@ -110,6 +110,9 @@ kubectl top  pod -n rd4
 
 kubectl cluster-info
 
+# 查看node详情
+kubectl get node -o yaml
+
 # kubectl资源类型  https://kubernetes.io/docs/reference/kubectl/overview/#resource-types
 
 # 查看sts资源 statefulsets
@@ -158,3 +161,47 @@ kubectl get pods --field-selector=status.phase!=Running,spec.restartPolicy=Alway
 kubectl get pods --field-selector=status.phase==Running,spec.restartPolicy=Always -n rd4
 kubectl get statefulsets,services --all-namespaces --field-selector metadata.namespace!=default
 kubectl get statefulsets --all-namespaces --field-selector metadata.namespace=rd4
+
+# 查看控制器事件
+ kubectl get event --watch
+
+
+# 查看sevice account
+kubectl get sa -n test
+
+
+# 查看role
+kubectl get role --all-namespaces
+kubectl get rolebinding --all-namespaces
+kubectl get clusterrole --all-namespaces
+kubectl get clusterrolebinding --all-namespaces
+
+
+# 查看PodSecurityPolicy
+kubectl get psp
+
+
+# 查看节点资源cpu内存等，并非实际使用，而是request和limit
+kubectl describe nodes
+
+#节点实际CPU和内存
+kubectl top node
+kubectl top pod
+kubectl top pod -n rd4
+# 前十个POD内存占用  column 3 descending
+kubectl top pod -n rd4 | sort --reverse --key 3 --numeric | head -10
+# 前十个PODCPU占用  column 3 descending
+kubectl top pod -n rd4 | sort --reverse --key 2 --numeric | head -10
+
+# 获取自定义资源
+kubectl get crd
+kubectl describe crd aliyunlogconfigs.log.alibabacloud.com
+
+
+# 查看环境变量
+kubectl exec -n saas-new-taobao exchange-open-api-675cc6c984-mszrp env
+
+# 查看ingress暴露的url
+kubectl describe ingress -n saas-new-taobao
+kubectl get ingress --all-namespaces
+kubectl describe ingress exchange-ingress -n saas-new-taobao

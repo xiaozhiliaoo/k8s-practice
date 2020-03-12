@@ -52,6 +52,25 @@ Why need Pod？1 deployment, horizontal scaling, and replication. Colocation (co
 k8s本质是容器化化的自动化集群管理技术。1 手动 2 自动
 集群本质工作：管理资源。和操作系统一样：管理资源。只是使用抽象不同。
 
+Kubernetes is designed for automation
+
+Pod->RelicaSet->Deployment->Operator
+
+Operators: Putting Operational Knowledge into Software
+
+ An Operator is an application-specific controller that 
+ extends the Kubernetes API to create, configure, and 
+ manage instances of complex stateful applications on behalf
+ of a Kubernetes user
+ 
+ stateful applications： databases, caches, and monitoring systems.
+
+etcd Operator: Simplify etcd cluster configuration and management
+
+Operator= Contoller+Resource = Infrastructure As Code
+
+通过一个ingress，暴露多个服务。
+
 
 
 
