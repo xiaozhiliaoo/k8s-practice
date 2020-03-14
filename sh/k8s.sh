@@ -28,6 +28,7 @@ kubectl get pods -o wide --namespace rd3
 
 kubectl get nodes -o wide -n rd3
 kubectl get pods -o wide -n rd3
+kubectl get pods --show-labels  -n saas-new-taobao
 kubectl get svc -o wide -n rd3
 kubectl get rs -o wide -n rd3
 kubectl get deploy -o wide -n rd3
@@ -49,12 +50,14 @@ kubectl get configmap open-user-config-rd4  -n rd4 -o yaml
 
 # 获取所有资源
 kubectl get all -n rd4
+kubectl get all -n rd4
 
 # 想看所有Pod都在哪些节点上运行
 kubectl get pod -A -o yaml |grep '^    n'|grep -v nodeSelector|awk 'NR%3==1{print ++n"\n"$0;next}1'
 # 想看所有Pod都在哪些节点上运行,过滤系统的
 kubectl get pod -A -o yaml |grep '^    n'|grep -v nodeSelector|sed 'N;N;s/\n/ /g'|grep -v kube-system
-
+# pod调度节点统计
+kubectl get pod -n saas-new-taobao -o wide
 # 查看所有pod
 kubectl get pods -A
 # 过滤系统的
@@ -93,12 +96,14 @@ kubectl describe ns rd4
 
 # limitRange资源
 kubectl get limits --all-namespaces
+kubectl get limitrange --all-namespaces
 
 # 查看ResourceQuota -资源配额
 kubectl get quota  --all-namespaces
 # 查看namespace占用资源
 kubectl get quota -n rd4
 kubectl describe quota -n rd4
+
 
 # 通过ResourceQuota和LimitRange进行资源管理
 
@@ -181,17 +186,24 @@ kubectl get clusterrolebinding --all-namespaces
 kubectl get psp
 
 
-# 查看节点资源cpu内存等，并非实际使用，而是request和limit
+# 查看(kubectl describe node)节点资源cpu内存等，并非实际使用，而是request和limit
 kubectl describe nodes
-
 #节点实际CPU和内存
 kubectl top node
+kubectl top node | sort --reverse --key 3 --numeric | head -10
+# why kubectl top node 和 rancher node信息不一样？？
+kubectl top node master01
+kubectl describe node master01
+
+
 kubectl top pod
 kubectl top pod -n rd4
 # 前十个POD内存占用  column 3 descending
 kubectl top pod -n rd4 | sort --reverse --key 3 --numeric | head -10
 # 前十个PODCPU占用  column 3 descending
 kubectl top pod -n rd4 | sort --reverse --key 2 --numeric | head -10
+# 查看pod里面容器占用资源
+kubectl top pod exchange-web-api-66d69c6dd5-vd8k8 -n saas-new-taobao --containers
 
 # 获取自定义资源
 kubectl get crd
@@ -205,3 +217,17 @@ kubectl exec -n saas-new-taobao exchange-open-api-675cc6c984-mszrp env
 kubectl describe ingress -n saas-new-taobao
 kubectl get ingress --all-namespaces
 kubectl describe ingress exchange-ingress -n saas-new-taobao
+
+# 查看CrashLoopBackOff错误(每次奔溃后重启)
+kubectl describe pod open-user-6865b88b57-8tvcq -n saas-new-taobao
+
+kubectl exec -it operate-api-6ccdf85cc-5rttm -n saas-new-taobao top
+
+# 0/1 nodes are available: 1 node(s) had taints that the pod didn't tolerate. 查看为什么调度失败？
+kubectl describe pod limited-pod
+kubectl get node -o yaml | grep taint -A 5
+
+# HPA(HorizontalPodAutoscaler)
+kubectl get hpa --all-namespaces
+
+kubectl get node -L avaliablity-zone -L share-type

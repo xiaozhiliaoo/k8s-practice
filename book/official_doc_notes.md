@@ -71,6 +71,10 @@ Operator= Contoller+Resource = Infrastructure As Code
 
 通过一个ingress，暴露多个服务。
 
+k8s里面只有pod，思维要从应用调到pod。
+
+container based application and cloud architecture
+
 
 
 
