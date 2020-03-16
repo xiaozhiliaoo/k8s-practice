@@ -75,6 +75,8 @@ k8s里面只有pod，思维要从应用调到pod。
 
 container based application and cloud architecture
 
+声明式：有10个redis服务区，而不是创建10个。
+
 
 
 

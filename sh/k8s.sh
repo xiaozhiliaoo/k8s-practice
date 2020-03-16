@@ -1,5 +1,9 @@
 # core kubeadm kubectl kubelet
+# https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+# https://github.com/dennyzhang/cheatsheet-kubernetes-A4
+
 # 查看k8s使用情况，1 查看命名空间 2 查看使用资源(怎么查看？？？) 3 查看nodes，pod占用资源
+
 
 kubectl run kubia --image=luksa/kubia --port=8080 --generator=run/v1
 
@@ -29,6 +33,7 @@ kubectl get pods -o wide --namespace rd3
 kubectl get nodes -o wide -n rd3
 kubectl get pods -o wide -n rd3
 kubectl get pods --show-labels  -n saas-new-taobao
+kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'
 kubectl get svc -o wide -n rd3
 kubectl get rs -o wide -n rd3
 kubectl get deploy -o wide -n rd3
@@ -47,6 +52,9 @@ kubectl get endpoints -n rd4 -o wide
 kubectl get configmap -n rd4
 kubectl get configmap jvm-heap  -n rd4 -o yaml
 kubectl get configmap open-user-config-rd4  -n rd4 -o yaml
+# -o yaml pod对象以ymal展示
+kubectl get configmap tomcat-config-dev5 -n saas-new-taobao -o yaml
+
 
 # 获取所有资源
 kubectl get all -n rd4
@@ -144,13 +152,21 @@ journalctl -u kubelet
 kubectl api-resources --namespaced=true
 # 不在namespace下的资源
 kubectl api-resources --namespaced=false
-
+kubectl api-resources -o name
+kubectl api-resources -o wide
+kubectl api-resources --api-group=extensions
 
 kubectl api-versions
 
 # 对象字段描述
 kubectl explain pod
 kubectl explain pod.spec
+# POD生命周期
+kubectl explain pod.status.phase
+# 容器生命周期
+kubectl explain pod.spec.containers.lifecycle
+# 重启策略
+kubectl explain pod.spec.restartPolicy
 
 # 列出API所有字段
 kubectl explain svc --recursive
@@ -231,3 +247,46 @@ kubectl get node -o yaml | grep taint -A 5
 kubectl get hpa --all-namespaces
 
 kubectl get node -L avaliablity-zone -L share-type
+
+kubectl get deploy,svc,po
+
+# 集群可用的服务 service catalog
+kubectl get clusterserviceclasses
+kubectl get serviceclass
+kubectl get instance --all-namespaces
+
+# 上下文和集群
+kubectl config get-contexts
+kubectl config get-clusters
+kubectl config current-context
+
+
+kubectl scale deployment nginx-deployment --replicas=4
+kubectl create -f nginx-deployment.yaml --record
+kubectl rollout status deployment/nginx-deployment
+# 触发滚动升级
+kubectl edit deployment/nginx-deployment
+#  滚动升级过程
+kubectl describe deployment nginx-deployment
+# 直接修改deploment镜像
+kubectl set image deployment/nginx-deployment nginx=nginx:1.91
+kubectl rollout undo deployment/nginx-deployment
+kubectl rollout history deployment/nginx-deployment
+kubectl rollout history deployment/nginx-deployment --revision=2
+kubectl rollout undo deployment/nginx-deployment --to-revision=2
+kubectl rollout pause deployment/nginx-deploymen
+kubectl rollout resume deploy/nginx-deployment
+
+
+
+kubeadm version
+
+# istio
+# 基于istio的VirtualService和Destination完成蓝绿和灰度发布(https://help.aliyun.com/document_detail/121189.html)
+# 容器服务Kubernetes版-阿里云
+
+kubectl get VirtualService --all-namespaces
+kubectl get Gateway --all-namespaces
+kubectl get DestinationRule --all-namespaces
+kubectl get gateway --all-namespaces
+kubectl get svc istio-ingressgateway -n istio-system

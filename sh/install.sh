@@ -12,6 +12,8 @@ sudo systemctl start docker
 ################################################################################################
 
 # install minikube
+setenforce 0  # 关闭selinux   vim /etc/selinux/config  SELINUX=disabled
+systemctl disable firewalld && systemctl stop firewalld  # 关闭防火墙
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 chmod +x minikube
 sudo mv minikube /usr/local/bin/
@@ -137,3 +139,12 @@ sudo mv rke /usr/local/bin/
 # docker run -d --restart=always -p 8080:8080 rancher/server
 docker run -d --restart=always -p 81:80 -p 82:443 --name rs2001 rancher/rancher:stable
 # admin 772654204lili
+
+
+
+# install Istio
+sudo wget https://github.com/istio/istio/releases/download/1.5.0/istio-1.5.0-linux.tar.gz
+tar -zxvf istio-1.5.0-linux.tar.gz
+cd istio-1.5.0
+chmod +x bin/istioctl
+sudo mv bin/istioctl /usr/local/bin/
