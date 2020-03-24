@@ -263,3 +263,7 @@ https://github.com/ContainerSolutions/k8s-deployment-strategies
 
 docker：标准化的交付机制。
 
+DevOps - Development And Operations
+
+How Kubernetes Changes Operations? BRENDAN BURNS
+

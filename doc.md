@@ -1,6 +1,8 @@
 ###
 https://kubernetes.io/zh/
 
+https://www.kubernetes.org.cn/k8s
+
 minikube dashboard
 
 https://rancher.com/cattle-swarm-kubernetes-side-side/
