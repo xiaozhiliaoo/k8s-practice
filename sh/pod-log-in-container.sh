@@ -7,6 +7,7 @@ usage(){
     echo $0" namespace moudleName"
     echo "查看namespace在rd4上exchange-web-api的日志:sh pod-log.sh rd4 exchange-web-api"
     echo "如果不知道有哪些namespace，请查看kubectl get ns"
+    echo "如果不知道namespace有哪些pod，请查看kubectl get pods -n xxxx"
 }
 
 if [ "$1" != "" ] && [ "$2" != "" ] ; then
